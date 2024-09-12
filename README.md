@@ -1,16 +1,7 @@
-# chatting_app
+## Sign Up Sign In Using Firebase
 
-A new Flutter project.
+<img src = "https://github.com/user-attachments/assets/0f4fbfdd-d65e-4fd7-a754-22a4ed76eccc" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/99f6e30e-9c34-4385-9b14-eb923644fbb0" height=65% width=22%>
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://github.com/user-attachments/assets/cb91f478-2119-42e4-8cda-907324ce0cd5
