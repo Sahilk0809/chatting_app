@@ -51,6 +51,7 @@ class MyTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final bool obscureText;
   final Widget? suffixIcon;
+  final void Function(String)? onChanged;
 
   const MyTextField({
     super.key,
@@ -59,6 +60,7 @@ class MyTextField extends StatefulWidget {
     this.prefixIcon,
     this.obscureText = false,
     this.suffixIcon,
+    this.onChanged,
   });
 
   @override
@@ -113,6 +115,7 @@ class _MyTextFieldState extends State<MyTextField>
         return ScaleTransition(
           scale: _scaleAnimation,
           child: TextField(
+            onChanged: widget.onChanged,
             controller: widget.controller,
             obscureText: widget.obscureText,
             focusNode: _focusNode,

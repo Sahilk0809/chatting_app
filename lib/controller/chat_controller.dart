@@ -49,10 +49,6 @@ class ChatController extends GetxController {
       Get.snackbar('Invalid!', 'Enter name');
     }
   }
-
-  void loginAccount(){
-
-  }
 }
 
 var chatController = Get.put(ChatController());
