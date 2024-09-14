@@ -1,3 +1,4 @@
+import 'package:chatting_app/modal/user_modal.dart';
 import 'package:chatting_app/services/auth/auth_service.dart';
 import 'package:chatting_app/services/chat/chat_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ class ChatController extends GetxController {
   var txtPassword = TextEditingController();
   var txtConfirmPassword = TextEditingController();
   var search = TextEditingController();
+  String searchUser = '';
   RxBool passwordVisible = false.obs;
 
   Future<void> createAccountValidation({

@@ -1,4 +1,5 @@
 import 'package:chatting_app/theme/theme.dart';
+import 'package:chatting_app/views/screens/chat_screen.dart';
 import 'package:chatting_app/views/screens/components/user_login_status.dart';
 import 'package:chatting_app/views/screens/home_screen.dart';
 import 'package:chatting_app/views/screens/sign_in_screen.dart';
@@ -43,6 +44,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/signIn',
           page: () => const SignInScreen(),
+          transition: Transition.leftToRightWithFade,
+        ),
+        GetPage(
+          name: '/chat',
+          page: () => const ChatScreen(),
           transition: Transition.leftToRightWithFade,
         ),
       ],

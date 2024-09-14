@@ -5,6 +5,7 @@ import 'package:chatting_app/services/chat/chat_services.dart';
 import 'package:chatting_app/views/screens/components/my_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -63,6 +64,7 @@ class HomeScreen extends StatelessWidget {
               controller: chatController.search,
               label: 'Search',
               prefixIcon: const Icon(Icons.search),
+              onChanged: (String value) {},
             ),
             const SizedBox(
               height: 20,
@@ -76,8 +78,32 @@ class HomeScreen extends StatelessWidget {
                   );
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return Expanded(
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: ListView.builder(
+                        itemCount: 10,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            leading: const CircleAvatar(
+                              radius: 30,
+                              backgroundColor: Colors.white,
+                            ),
+                            title: Container(
+                              height: 10,
+                              width: double.infinity,
+                              color: Colors.white,
+                            ),
+                            subtitle: Container(
+                              height: 10,
+                              width: double.infinity,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   );
                 }
 
@@ -94,7 +120,11 @@ class HomeScreen extends StatelessWidget {
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(userList[index].image),
                         ),
-                        title: Text(userList[index].name),
+                        title: GestureDetector(
+                            onTap: () {
+                              Get.toNamed('/chat');
+                            }, child: Text(userList[index].name)),
+                        subtitle: Text(userList[index].email),
                       );
                     },
                   ),

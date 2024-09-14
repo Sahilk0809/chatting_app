@@ -19,8 +19,16 @@ class ChatServices {
     });
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserFromFireStore() async {
+  Future<DocumentSnapshot<Map<String, dynamic>>>
+      getCurrentUserFromFireStore() async {
     return await _fireStore.collection('users').doc(user!.email).get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> searchUser(String value) async {
+    return await _fireStore
+        .collection('users')
+        .where("name", isEqualTo: value)
+        .get();
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFireStore() async {
