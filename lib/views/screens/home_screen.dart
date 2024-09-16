@@ -117,13 +117,17 @@ class HomeScreen extends StatelessWidget {
                     itemCount: userList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
+                        onTap: () {
+                          chatController.getReceiver(
+                            userList[index].email,
+                            userList[index].name,
+                          );
+                          Get.toNamed('/chat');
+                        },
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(userList[index].image),
                         ),
-                        title: GestureDetector(
-                            onTap: () {
-                              Get.toNamed('/chat');
-                            }, child: Text(userList[index].name)),
+                        title: Text(userList[index].name),
                         subtitle: Text(userList[index].email),
                       );
                     },

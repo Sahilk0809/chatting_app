@@ -1,3 +1,4 @@
+import 'package:chatting_app/modal/chat_modal.dart';
 import 'package:chatting_app/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,5 +37,14 @@ class ChatServices {
         .collection('users')
         .where("email", isNotEqualTo: user!.email)
         .get();
+  }
+
+  void addMessageToFireStore(ChatModal chat){
+    String? sender = chat.sender;
+    String? receiver = chat.receiver;
+    List doc = [sender, receiver];
+    doc.sort();
+    String docId = doc.join("_");
+    _fireStore.collection("chatroom").doc(docId).collection("chat").add(chat.toMap(chat));
   }
 }

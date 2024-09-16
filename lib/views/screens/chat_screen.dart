@@ -1,3 +1,8 @@
+import 'package:chatting_app/controller/chat_controller.dart';
+import 'package:chatting_app/modal/chat_modal.dart';
+import 'package:chatting_app/services/auth/auth_service.dart';
+import 'package:chatting_app/views/screens/components/my_text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,9 +50,9 @@ class ChatScreen extends StatelessWidget {
                       SizedBox(
                         width: width * 0.03,
                       ),
-                      const Text(
-                        'User',
-                        style: TextStyle(
+                      Text(
+                        chatController.receiverName.value,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                         ),
@@ -86,35 +91,57 @@ class ChatScreen extends StatelessWidget {
                   SizedBox(
                     height: height * 0.82,
                   ),
-                  TextField(
-                    cursorColor: Colors.white.withOpacity(0.3),
-                    decoration: InputDecoration(
-                      hintText: 'Message',
-                      hintStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.3)),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.white.withOpacity(0.3),
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.white.withOpacity(0.3),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Colors.white.withOpacity(0.3),
-                        ),
-                      ),
+                  // StreamBuilder(stream:, builder: (context, snapshot) {
+                  //
+                  // },),
+
+                  MyTextField(
+                    controller: chatController.txtMessage,
+                    label: 'Message',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        ChatModal(
+                          receiver: chatController.receiverEmail.value,
+                          message: chatController.txtMessage.text,
+                          sender:
+                              AuthService.authService.getCurrentUser()!.email,
+                          timestamp: Timestamp.now(),
+                        );
+                        chatController.txtMessage.clear();
+                      },
+                      icon: const Icon(Icons.send),
                     ),
                   ),
+
+                  // TextField(
+                  //   cursorColor: Colors.white.withOpacity(0.3),
+                  //   decoration: InputDecoration(
+                  //     hintText: 'Message',
+                  //     hintStyle:
+                  //     TextStyle(color: Colors.white.withOpacity(0.3)),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       borderSide: BorderSide(
+                  //         width: 1,
+                  //         color: Colors.white.withOpacity(0.3),
+                  //       ),
+                  //     ),
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       borderSide: BorderSide(
+                  //         width: 1,
+                  //         color: Colors.white.withOpacity(0.3),
+                  //       ),
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       borderSide: BorderSide(
+                  //         width: 2,
+                  //         color: Colors.white.withOpacity(0.3),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

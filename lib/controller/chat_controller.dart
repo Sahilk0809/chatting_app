@@ -9,9 +9,12 @@ class ChatController extends GetxController {
   var txtName = TextEditingController();
   var txtPassword = TextEditingController();
   var txtConfirmPassword = TextEditingController();
+  var txtMessage = TextEditingController();
   var search = TextEditingController();
   String searchUser = '';
   RxBool passwordVisible = false.obs;
+  RxString receiverEmail = ''.obs;
+  RxString receiverName = ''.obs;
 
   Future<void> createAccountValidation({
     required String email,
@@ -50,6 +53,11 @@ class ChatController extends GetxController {
     } else {
       Get.snackbar('Invalid!', 'Enter name');
     }
+  }
+
+  void getReceiver(String email, String name){
+    receiverEmail.value = email;
+    receiverName.value = name;
   }
 }
 
