@@ -32,19 +32,37 @@ class ChatServices {
         .get();
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFireStore() async {
-    return await _fireStore
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsersFromFireStore() {
+    return _fireStore
         .collection('users')
         .where("email", isNotEqualTo: user!.email)
-        .get();
+        .snapshots();
   }
 
-  void addMessageToFireStore(ChatModal chat){
+  Future<void> addMessageToFireStore(ChatModal chat) async {
     String? sender = chat.sender;
     String? receiver = chat.receiver;
     List doc = [sender, receiver];
     doc.sort();
     String docId = doc.join("_");
-    _fireStore.collection("chatroom").doc(docId).collection("chat").add(chat.toMap(chat));
+    await _fireStore
+        .collection("chatroom")
+        .doc(docId)
+        .collection("chat")
+        .add(chat.toMap(chat));
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> readMessagesFromFireStore(
+      String receiver) {
+    String sender = AuthService.authService.getCurrentUser()!.email!;
+    List doc = [sender, receiver];
+    doc.sort();
+    String docId = doc.join("_");
+    return _fireStore
+        .collection("chatroom")
+        .doc(docId)
+        .collection("chat")
+        .orderBy('timestamp', descending: false)
+        .snapshots();
   }
 }

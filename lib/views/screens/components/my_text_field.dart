@@ -64,10 +64,10 @@ class MyTextField extends StatefulWidget {
   });
 
   @override
-  _MyTextFieldState createState() => _MyTextFieldState();
+  MyTextFieldState createState() => MyTextFieldState();
 }
 
-class _MyTextFieldState extends State<MyTextField>
+class MyTextFieldState extends State<MyTextField>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;

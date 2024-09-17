@@ -49,7 +49,6 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/chat',
           page: () => const ChatScreen(),
-          transition: Transition.leftToRightWithFade,
         ),
       ],
     );
