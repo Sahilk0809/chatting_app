@@ -22,19 +22,24 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController scrollController = ScrollController();
 
   void scrollToBottom() {
-    if (scrollController.hasClients) {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-      );
-    }
+    Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        if (scrollController.hasClients) {
+          scrollController.animateTo(
+            scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.fastOutSlowIn,
+          );
+        }
+      },
+    );
   }
 
   @override
   void initState() {
-    super.initState();
     scrollToBottom();
+    super.initState();
   }
 
   @override
@@ -97,6 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
             width: width * 0.03,
           ),
           Container(
+            margin: const EdgeInsets.only(right: 10),
             height: height * 0.05,
             width: width * 0.1,
             decoration: BoxDecoration(
@@ -226,7 +232,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                 var alignment = isCurrentUser
                                     ? Alignment.centerRight
                                     : Alignment.centerLeft;
-                                lastMessage = chatList[index].message!;
                                 return Container(
                                   alignment: alignment,
                                   child: Column(
@@ -258,16 +263,23 @@ class _ChatScreenState extends State<ChatScreen> {
                   label: 'Message',
                   suffixIcon: IconButton(
                     onPressed: () async {
-                      ChatModal chat = ChatModal(
-                        receiver: chatController.receiverEmail.value,
-                        message: chatController.txtMessage.text,
-                        sender: AuthService.authService.getCurrentUser()!.email,
-                        timestamp: Timestamp.now(),
-                      );
-                      chatController.txtMessage.clear();
-                      scrollToBottom();
-                      await ChatServices.chatServices
-                          .addMessageToFireStore(chat);
+                      // Trim the message text before checking if it's empty
+                      String messageText =
+                          chatController.txtMessage.text.trim();
+
+                      if (messageText.isNotEmpty) {
+                        ChatModal chat = ChatModal(
+                          receiver: chatController.receiverEmail.value,
+                          message: messageText, // Use the trimmed message text
+                          sender:
+                              AuthService.authService.getCurrentUser()!.email,
+                          timestamp: Timestamp.now(),
+                        );
+                        chatController.txtMessage.clear();
+                        scrollToBottom();
+                        await ChatServices.chatServices
+                            .addMessageToFireStore(chat);
+                      }
                     },
                     icon: const Icon(Icons.send),
                   ),
@@ -280,5 +292,3 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-
-String lastMessage = '';

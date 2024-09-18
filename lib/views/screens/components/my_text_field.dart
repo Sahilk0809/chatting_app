@@ -1,48 +1,3 @@
-// import 'package:flutter/material.dart';
-//
-// class MyTextField extends StatelessWidget {
-//   final TextEditingController controller;
-//   final String label;
-//   final Icon prefixIcon;
-//   final bool obscureText;
-//   final Widget? suffixIcon;
-//
-//   const MyTextField({
-//     super.key,
-//     required this.controller,
-//     required this.label,
-//     required this.prefixIcon,
-//     this.obscureText = false,
-//     this.suffixIcon,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Form(
-//       child: TextFormField(
-//         cursorColor: Colors.grey,
-//         controller: controller,
-//         obscureText: obscureText,
-//         decoration: InputDecoration(
-//           prefixIcon: prefixIcon,
-//           suffixIcon: suffixIcon,
-//           label: Text(label),
-//           labelStyle: TextStyle(color: Colors.grey[600]),
-//           border: OutlineInputBorder(
-//             borderRadius: BorderRadius.circular(10),
-//           ),
-//           focusedBorder: OutlineInputBorder(
-//             borderRadius: BorderRadius.circular(10),
-//             borderSide: const BorderSide(
-//               color: Colors.grey,
-//               width: 2,
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatefulWidget {
@@ -52,6 +7,7 @@ class MyTextField extends StatefulWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
 
   const MyTextField({
     super.key,
@@ -61,6 +17,7 @@ class MyTextField extends StatefulWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.onChanged,
+    this.onTap,
   });
 
   @override
@@ -118,6 +75,7 @@ class MyTextFieldState extends State<MyTextField>
             onChanged: widget.onChanged,
             controller: widget.controller,
             obscureText: widget.obscureText,
+            onTap: widget.onTap,
             focusNode: _focusNode,
             style: const TextStyle(
               color: Colors.black87,
