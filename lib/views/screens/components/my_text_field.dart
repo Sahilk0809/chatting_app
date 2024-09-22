@@ -8,6 +8,7 @@ class MyTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final void Function(String)? onChanged;
   final void Function()? onTap;
+  final void Function(PointerDownEvent)? onTapOutside;
 
   const MyTextField({
     super.key,
@@ -18,6 +19,7 @@ class MyTextField extends StatefulWidget {
     this.suffixIcon,
     this.onChanged,
     this.onTap,
+    this.onTapOutside,
   });
 
   @override
@@ -72,6 +74,7 @@ class MyTextFieldState extends State<MyTextField>
         return ScaleTransition(
           scale: _scaleAnimation,
           child: TextField(
+            onTapOutside: widget.onTapOutside,
             textInputAction: TextInputAction.newline,
             maxLines: 15,
             minLines: 1,

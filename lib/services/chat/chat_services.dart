@@ -19,6 +19,7 @@ class ChatServices {
       'token': token,
       'image': image,
       'isOnline': false,
+      'isTyping': false,
       'timestamp': Timestamp.now(),
     });
   }
@@ -85,15 +86,18 @@ class ChatServices {
     });
   }
 
-  Future<void> toggleOnlineStatus(bool status, Timestamp timestamp) async {
+  Future<void> toggleOnlineStatus(
+      bool status, Timestamp timestamp, bool isTyping) async {
     String email = AuthService.authService.getCurrentUser()!.email!;
     await _fireStore.collection("users").doc(email).update({
       'isOnline': status,
       'timestamp': timestamp,
+      'isTyping': isTyping,
     });
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> checkUserIsOnlineOrNot(String email){
+  Stream<DocumentSnapshot<Map<String, dynamic>>> checkUserIsOnlineOrNot(
+      String email) {
     return _fireStore.collection("users").doc(email).snapshots();
   }
 

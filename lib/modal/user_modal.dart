@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModal {
   late String name, email, token, image;
-  late bool isOnline;
+  late bool isOnline, isTyping;
   late Timestamp timestamp;
 
   UserModal({
@@ -12,6 +12,7 @@ class UserModal {
     required this.image,
     required this.isOnline,
     required this.timestamp,
+    required this.isTyping,
   });
 
   factory UserModal.fromMap(Map m1) {
@@ -22,6 +23,7 @@ class UserModal {
       image: m1['image'],
       isOnline: m1['isOnline'] ?? false,
       timestamp: m1['timestamp'],
+      isTyping: m1['isTyping'] ?? false,
     );
   }
 }

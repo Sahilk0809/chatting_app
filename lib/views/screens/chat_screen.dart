@@ -136,6 +136,18 @@ class _ChatScreenState extends State<ChatScreen> {
                     label: 'Message',
                     onChanged: (value) {
                       chatController.messageStore.value = value;
+                      ChatServices.chatServices.toggleOnlineStatus(
+                        true,
+                        Timestamp.now(),
+                        true,
+                      );
+                    },
+                    onTapOutside: (event) {
+                      ChatServices.chatServices.toggleOnlineStatus(
+                        true,
+                        Timestamp.now(),
+                        false,
+                      );
                     },
                     suffixIcon: _buildSendButton(),
                   );
@@ -198,7 +210,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
                 return Text(
                   user['isOnline']
-                      ? 'Online'
+                      ? (user['isTyping'])
+                          ? 'Typing...'
+                          : 'Online'
                       : 'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay',
                   style: const TextStyle(
                     color: Colors.white,
@@ -347,6 +361,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 await ChatServices.chatServices.addMessageToFireStore(chat);
               }
               scrollToBottom();
+              ChatServices.chatServices.toggleOnlineStatus(
+                true,
+                Timestamp.now(),
+                false,
+              );
             }
           },
           icon: chatController.isEditing.value

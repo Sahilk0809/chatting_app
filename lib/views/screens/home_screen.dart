@@ -16,24 +16,39 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    ChatServices.chatServices.toggleOnlineStatus(true, Timestamp.now());
+    ChatServices.chatServices.toggleOnlineStatus(
+      true,
+      Timestamp.now(),
+      false,
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
-    if(state == AppLifecycleState.paused){
-      ChatServices.chatServices.toggleOnlineStatus(false, Timestamp.now());
-    } else if(state == AppLifecycleState.resumed){
-      ChatServices.chatServices.toggleOnlineStatus(true, Timestamp.now());
-    } else if(state == AppLifecycleState.inactive){
-      ChatServices.chatServices.toggleOnlineStatus(false, Timestamp.now());
+    if (state == AppLifecycleState.paused) {
+      ChatServices.chatServices.toggleOnlineStatus(
+        false,
+        Timestamp.now(),
+        false,
+      );
+    } else if (state == AppLifecycleState.resumed) {
+      ChatServices.chatServices.toggleOnlineStatus(
+        true,
+        Timestamp.now(),
+        false,
+      );
+    } else if (state == AppLifecycleState.inactive) {
+      ChatServices.chatServices.toggleOnlineStatus(
+        false,
+        Timestamp.now(),
+        false,
+      );
     }
   }
 
@@ -134,7 +149,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             TextButton(
                               onPressed: () {
                                 AuthService.authService.signOut();
-                                ChatServices.chatServices.toggleOnlineStatus(false, Timestamp.now());
+                                ChatServices.chatServices.toggleOnlineStatus(
+                                  false,
+                                  Timestamp.now(),
+                                  false,
+                                );
                                 Get.offAndToNamed('/');
                               },
                               child: const Text('Logout'),

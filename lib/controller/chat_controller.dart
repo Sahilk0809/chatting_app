@@ -25,6 +25,9 @@ class ChatController extends GetxController {
   RxBool isEditing = false.obs;
   RxString messageIdToEdit = ''.obs;
 
+  // to check if user is typing or not
+  RxBool isTyping = false.obs;
+
   Future<void> createAccountValidation({
     required String email,
     required String password,
