@@ -3,12 +3,45 @@ import 'package:chatting_app/modal/user_modal.dart';
 import 'package:chatting_app/services/auth/auth_service.dart';
 import 'package:chatting_app/services/chat/chat_services.dart';
 import 'package:chatting_app/views/screens/components/my_text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    ChatServices.chatServices.toggleOnlineStatus(true, Timestamp.now());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if(state == AppLifecycleState.paused){
+      ChatServices.chatServices.toggleOnlineStatus(false, Timestamp.now());
+    } else if(state == AppLifecycleState.resumed){
+      ChatServices.chatServices.toggleOnlineStatus(true, Timestamp.now());
+    } else if(state == AppLifecycleState.inactive){
+      ChatServices.chatServices.toggleOnlineStatus(false, Timestamp.now());
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +52,10 @@ class HomeScreen extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
-                child: Text(snapshot.error.toString(),
-                    style: TextStyle(color: Colors.grey.shade700)),
+                child: Text(
+                  snapshot.error.toString(),
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -71,10 +106,49 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    leading: Icon(Icons.settings,
-                        color: Colors.white.withOpacity(0.6)),
+                    leading: Icon(
+                      Icons.settings,
+                      color: Colors.white.withOpacity(0.6),
+                    ),
                     title: const Text(
                       'Settings',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Are you sure!"),
+                          content: const Text('Do you want to logout'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                AuthService.authService.signOut();
+                                ChatServices.chatServices.toggleOnlineStatus(false, Timestamp.now());
+                                Get.offAndToNamed('/');
+                              },
+                              child: const Text('Logout'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    leading: Icon(
+                      Icons.logout,
+                      color: Colors.white.withOpacity(0.6),
+                    ),
+                    title: const Text(
+                      'Logout',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -88,7 +162,7 @@ class HomeScreen extends StatelessWidget {
       ),
       appBar: AppBar(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.blueGrey.shade800,
+        backgroundColor: Colors.blueGrey.shade700,
         title: const Text(
           'Chat',
           style: TextStyle(
@@ -96,17 +170,6 @@ class HomeScreen extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              AuthService.authService.signOut();
-            },
-            icon: const Icon(
-              Icons.logout,
-              color: Colors.white,
-            ),
-          ),
-        ],
       ),
       body: Stack(
         children: [
@@ -137,8 +200,10 @@ class HomeScreen extends StatelessWidget {
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
-                          child: Text(snapshot.error.toString(),
-                              style: TextStyle(color: Colors.grey.shade700)),
+                          child: Text(
+                            snapshot.error.toString(),
+                            style: TextStyle(color: Colors.grey.shade700),
+                          ),
                         );
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -183,7 +248,8 @@ class HomeScreen extends StatelessWidget {
                                 userList[index].email,
                                 userList[index].name,
                               );
-                              image = userList[index].image;
+                              chatController.image.value =
+                                  userList[index].image;
                               Get.toNamed('/chat');
                             },
                             contentPadding:

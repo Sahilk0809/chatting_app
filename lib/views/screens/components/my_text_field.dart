@@ -72,6 +72,10 @@ class MyTextFieldState extends State<MyTextField>
         return ScaleTransition(
           scale: _scaleAnimation,
           child: TextField(
+            textInputAction: TextInputAction.newline,
+            maxLines: 15,
+            minLines: 1,
+            enableSuggestions: true,
             onChanged: widget.onChanged,
             controller: widget.controller,
             obscureText: widget.obscureText,
