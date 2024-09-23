@@ -348,6 +348,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   chatController.receiverEmail.value,
                   messageText,
                 );
+                chatController.txtMessage.clear();
                 chatController.messageIdToEdit.value = '';
                 chatController.isEditing.value = false;
               } else {
