@@ -42,28 +42,35 @@ class AuthService {
 
   Future<void> signUpUsingGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+        await googleSignInAccount.authentication;
+
         final AuthCredential authCredential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-        userCredential = await _auth.signInWithCredential(authCredential);
-        await ChatServices.chatServices.addUserToFireStore(
-          userCredential!.user!.displayName!,
-          userCredential!.user!.email!,
-          userCredential!.user!.photoURL!,
-          '',
-        );
-        Get.offAndToNamed('/home');
+
+        final UserCredential userCredential = await _auth.signInWithCredential(authCredential);
+
+        if (userCredential.user != null) {
+          await ChatServices.chatServices.addUserToFireStore(
+            userCredential.user!.displayName ?? 'Unknown',
+            userCredential.user!.email!,
+            userCredential.user!.photoURL ?? '',
+            '',
+          );
+          Get.offAndToNamed('/home');
+        }
       }
     } on FirebaseAuthException catch (e) {
-      throw Get.snackbar('Error!', e.code);
+      Get.snackbar('Error!', 'Sign-in failed: ${e.message}');
+    } catch (e) {
+      Get.snackbar('Error!', 'An unexpected error occurred: $e');
     }
   }
+
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();

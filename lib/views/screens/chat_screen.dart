@@ -1,4 +1,5 @@
 import 'package:chatting_app/modal/user_modal.dart';
+import 'package:chatting_app/views/screens/components/call_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +34,13 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       },
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollToBottom();
   }
 
   @override
@@ -133,6 +141,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 Obx(() {
                   return MyTextField(
                     controller: chatController.txtMessage,
+                    minLines: 1,
+                    maxLines: 12,
                     label: 'Message',
                     onChanged: (value) {
                       chatController.messageStore.value = value;
@@ -186,7 +196,7 @@ class _ChatScreenState extends State<ChatScreen> {
               chatController.receiverName.value,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 19,
               ),
             ),
             StreamBuilder(
@@ -215,6 +225,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           : 'Online'
                       : 'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay',
                   style: const TextStyle(
+                    fontSize: 13,
                     color: Colors.white,
                   ),
                 );
@@ -319,7 +330,13 @@ class _ChatScreenState extends State<ChatScreen> {
     return Row(
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const CallPage(isVideoCall: true),
+              ),
+            );
+          },
           icon: const Icon(
             CupertinoIcons.video_camera_solid,
             size: 32,
@@ -327,7 +344,13 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const CallPage(isVideoCall: false),
+              ),
+            );
+          },
           icon: const Icon(Icons.call, color: Colors.white),
         ),
       ],
@@ -351,6 +374,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 chatController.txtMessage.clear();
                 chatController.messageIdToEdit.value = '';
                 chatController.isEditing.value = false;
+                scrollToBottom();
               } else {
                 ChatModal chat = ChatModal(
                   receiver: chatController.receiverEmail.value,
@@ -361,13 +385,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 chatController.txtMessage.clear();
                 await ChatServices.chatServices.addMessageToFireStore(chat);
               }
-              scrollToBottom();
-              ChatServices.chatServices.toggleOnlineStatus(
+              await ChatServices.chatServices.toggleOnlineStatus(
                 true,
                 Timestamp.now(),
                 false,
               );
             }
+            scrollToBottom();
           },
           icon: chatController.isEditing.value
               ? const Icon(Icons.check)

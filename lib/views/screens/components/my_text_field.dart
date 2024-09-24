@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class MyTextField extends StatefulWidget {
   final TextEditingController controller;
+  final int minLines;
+  final int maxLines;
   final String label;
   final Widget? prefixIcon;
   final bool obscureText;
@@ -20,6 +22,8 @@ class MyTextField extends StatefulWidget {
     this.onChanged,
     this.onTap,
     this.onTapOutside,
+    this.maxLines = 1,
+    this.minLines = 1,
   });
 
   @override
@@ -76,8 +80,8 @@ class MyTextFieldState extends State<MyTextField>
           child: TextField(
             onTapOutside: widget.onTapOutside,
             textInputAction: TextInputAction.newline,
-            maxLines: 15,
-            minLines: 1,
+            maxLines: widget.maxLines,
+            minLines: widget.minLines,
             enableSuggestions: true,
             onChanged: widget.onChanged,
             controller: widget.controller,
