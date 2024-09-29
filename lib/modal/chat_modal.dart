@@ -18,7 +18,7 @@ class ChatModal {
       message: m1['message'],
       sender: m1['sender'],
       timestamp: m1['timestamp'],
-      image: m1['image'],
+      image: m1['image'] ?? '',
     );
   }
 

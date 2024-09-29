@@ -1,7 +1,5 @@
 import 'package:chatting_app/services/auth/auth_service.dart';
-import 'package:chatting_app/services/chat/chat_services.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class GoogleButton extends StatelessWidget {
   const GoogleButton({super.key});
@@ -13,7 +11,7 @@ class GoogleButton extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         AuthService.authService.signUpUsingGoogle();
-        Get.toNamed('/');
+        // Get.toNamed('/authGate');
       },
       child: Container(
         height: height * 0.065,

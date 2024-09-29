@@ -1,10 +1,8 @@
 import 'package:chatting_app/controller/chat_controller.dart';
-import 'package:chatting_app/services/auth/auth_service.dart';
-import 'package:chatting_app/views/screens/components/google_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
+import '../../controller/theme_controller.dart';
 import 'components/button.dart';
 import 'components/my_text_field.dart';
 
@@ -14,8 +12,6 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -25,10 +21,10 @@ class SignUpScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    (chatController.isDark.value)
+                    (themeController.isDark.value)
                         ? Colors.black
                         : Colors.blueGrey.shade700,
-                    (chatController.isDark.value)
+                    (themeController.isDark.value)
                         ? Colors.grey[800]!
                         : Colors.blueGrey.shade500
                   ],

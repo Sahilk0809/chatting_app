@@ -32,17 +32,8 @@ class ChatController extends GetxController {
   // token to send notification
   RxString deviceToken = ''.obs;
 
-  // to store image to send by the user
+  // to store image which send by the user
   RxString imageStore = ''.obs;
-
-  // to check whether the it is dark mode or light mode
-  RxBool isDark = false.obs;
-
-  // toggle the light dark mode
-
-  void toggleLightDarkMode(){
-    isDark.value = !isDark.value;
-  }
 
   void uploadImageToStorage(String url) {
     imageStore.value = url;
@@ -72,7 +63,7 @@ class ChatController extends GetxController {
             txtConfirmPassword.clear();
             txtPassword.clear();
             txtName.clear();
-            Get.toNamed('/');
+            Get.toNamed('/authGate');
           } else {
             Get.snackbar('Invalid!', 'Passwords not match');
           }

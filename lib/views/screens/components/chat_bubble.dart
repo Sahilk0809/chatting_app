@@ -49,7 +49,30 @@ class ChatBubble extends StatelessWidget {
                   ],
                 ),
         ),
-        child: (image.isEmpty || image == '')
+        // child: Image.network(
+        //   image,
+        //   fit: BoxFit.cover,
+        //   height: 200,
+        //   loadingBuilder: (BuildContext context, Widget child,
+        //       ImageChunkEvent? loadingProgress) {
+        //     if (loadingProgress == null) return child;
+        //     return Center(
+        //       child: CircularProgressIndicator(
+        //         value: loadingProgress.expectedTotalBytes != null
+        //             ? loadingProgress.cumulativeBytesLoaded /
+        //                 (loadingProgress.expectedTotalBytes ?? 1)
+        //             : null,
+        //       ),
+        //     );
+        //   },
+        //   errorBuilder: (context, error, stackTrace) {
+        //     return const Text(
+        //       'Image failed to load',
+        //       style: TextStyle(color: Colors.red),
+        //     );
+        //   },
+        // ),
+        child: image.isEmpty
             ? Text(
                 message,
                 style: TextStyle(
@@ -61,6 +84,24 @@ class ChatBubble extends StatelessWidget {
                 image,
                 fit: BoxFit.cover,
                 height: 200,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              (loadingProgress.expectedTotalBytes ?? 1)
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Text(
+                    'Image failed to load',
+                    style: TextStyle(color: Colors.red),
+                  );
+                },
               ),
       ),
     );

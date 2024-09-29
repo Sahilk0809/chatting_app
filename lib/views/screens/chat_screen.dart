@@ -1,3 +1,4 @@
+import 'package:chatting_app/controller/theme_controller.dart';
 import 'package:chatting_app/services/storage/storage_services.dart';
 import 'package:chatting_app/views/screens/components/call_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,7 +39,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     scrollToBottom();
   }
@@ -62,10 +62,10 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    (chatController.isDark.value)
+                    (themeController.isDark.value)
                         ? Colors.black
                         : Colors.blueGrey.shade700,
-                    (chatController.isDark.value)
+                    (themeController.isDark.value)
                         ? Colors.grey[800]!
                         : Colors.blueGrey.shade500
                   ],
@@ -84,9 +84,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? _buildNormalBar(width) // Normal AppBar
                       : _buildEditBar(width), // Edit Mode AppBar
                 ),
-                SizedBox(
-                  height: height * 0.005,
-                ),
+                // SizedBox(
+                //   height: height * 0.005,
+                // ),
                 Expanded(
                   child: StreamBuilder(
                     stream: ChatServices.chatServices.readMessagesFromFireStore(
@@ -227,15 +227,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   nightDay = 'AM';
                 }
 
-                if (user['timestamp'].toDate().day ==
-                    Timestamp.now().toDate().day) {
-                  lastSeen =
-                      'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
-                } else if (user['timestamp'].toDate().month ==
-                    Timestamp.now().toDate().month) {
-                  lastSeen =
-                      'Last seen at ${user['timestamp'].toDate().day}/${user['timestamp'].toDate().month} ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
-                }
+                // if (user['timestamp'].toDate().day ==
+                //     Timestamp.now().toDate().day) {
+                //   lastSeen =
+                //       'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
+                // } else if (user['timestamp'].toDate().month ==
+                //     Timestamp.now().toDate().month) {
+                //   lastSeen =
+                //       'Last seen at ${user['timestamp'].toDate().day}/${user['timestamp'].toDate().month} ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
+                // }
+
+                lastSeen =
+                    'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
 
                 return Text(
                   user['isOnline']
@@ -429,7 +432,7 @@ class _ChatScreenState extends State<ChatScreen> {
             if (chatController.imageStore.value.isNotEmpty) {
               ChatModal chat = ChatModal(
                 receiver: chatController.receiverEmail.value,
-                message: '',
+                message: messageText,
                 sender: AuthService.authService.getCurrentUser()!.email,
                 timestamp: Timestamp.now(),
                 image: chatController.imageStore.value,
@@ -475,7 +478,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   Icons.send,
                   color: (chatController.messageStore.trim().isEmpty)
                       ? Colors.grey
-                      : (chatController.isDark.value) ? Colors.black : Colors.blueGrey,
+                      : (themeController.isDark.value)
+                          ? Colors.black
+                          : Colors.blueGrey,
                 ),
         ),
       ],

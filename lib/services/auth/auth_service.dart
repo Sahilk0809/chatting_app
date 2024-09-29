@@ -61,7 +61,7 @@ class AuthService {
             userCredential.user!.photoURL ?? '',
             '',
           );
-          Get.offAndToNamed('/home');
+          Get.offAndToNamed('/authGate');
         }
       }
     } on FirebaseAuthException catch (e) {

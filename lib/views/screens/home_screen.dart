@@ -1,4 +1,5 @@
 import 'package:chatting_app/controller/chat_controller.dart';
+import 'package:chatting_app/controller/theme_controller.dart';
 import 'package:chatting_app/modal/user_modal.dart';
 import 'package:chatting_app/services/auth/auth_service.dart';
 import 'package:chatting_app/services/chat/chat_services.dart';
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
       ChatServices.chatServices.toggleOnlineStatus(
@@ -89,10 +89,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      (chatController.isDark.value)
+                      (themeController.isDark.value)
                           ? Colors.black
                           : Colors.blueGrey.shade700,
-                      (chatController.isDark.value)
+                      (themeController.isDark.value)
                           ? Colors.grey[800]!
                           : Colors.blueGrey.shade500
                     ],
@@ -155,9 +155,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         ),
                       ),
                       trailing: Switch(
-                        value: chatController.isDark.value,
+                        value: themeController.isDark.value,
                         onChanged: (value) {
-                          chatController.toggleLightDarkMode();
+                          themeController.toggleLightDarkMode();
                         },
                       ),
                     ),
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     Timestamp.now(),
                                     false,
                                   );
-                                  Get.offAndToNamed('/');
+                                  Get.offAndToNamed('/authGate');
                                 },
                                 child: const Text('Logout'),
                               ),
@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         child: Obx(
           () => AppBar(
             foregroundColor: Colors.white,
-            backgroundColor: (chatController.isDark.value)
+            backgroundColor: (themeController.isDark.value)
                 ? Colors.black
                 : Colors.blueGrey.shade700,
             title: const Text(
@@ -234,10 +234,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    (chatController.isDark.value)
+                    (themeController.isDark.value)
                         ? Colors.black
                         : Colors.blueGrey.shade700,
-                    (chatController.isDark.value)
+                    (themeController.isDark.value)
                         ? Colors.grey[800]!
                         : Colors.blueGrey.shade500
                   ],
@@ -303,9 +303,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       for (var user in data) {
                         userList.add(UserModal.fromMap(user.data()));
                       }
+
+                      String nightDay = '';
+
                       return ListView.builder(
                         itemCount: userList.length,
                         itemBuilder: (context, index) {
+                          if (userList[index].timestamp.toDate().hour > 11) {
+                            nightDay = 'PM';
+                          } else {
+                            nightDay = 'AM';
+                          }
                           return ListTile(
                             onTap: () {
                               chatController.deviceToken.value =
@@ -333,7 +341,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               ),
                             ),
                             subtitle: Text(
-                              'Last seen at ${userList[index].timestamp.toDate().day}/${userList[index].timestamp.toDate().month}  ${userList[index].timestamp.toDate().hour % 12}:${userList[index].timestamp.toDate().minute}',
+                              (userList[index].isOnline)
+                                  ? (userList[index].isTyping)
+                                      ? 'Typing...'
+                                      : 'Online'
+                                  : 'Last seen at ${userList[index].timestamp.toDate().hour % 12}:${userList[index].timestamp.toDate().minute} $nightDay',
                               style: TextStyle(color: Colors.grey.shade400),
                             ),
                           );
