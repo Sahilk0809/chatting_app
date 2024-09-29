@@ -6,6 +6,7 @@ class ChatBubble extends StatelessWidget {
   final String message;
   final Timestamp timestamp;
   final void Function()? onLongPress;
+  final String image;
 
   const ChatBubble({
     super.key,
@@ -13,6 +14,7 @@ class ChatBubble extends StatelessWidget {
     required this.message,
     required this.timestamp,
     required this.onLongPress,
+    required this.image,
   });
 
   @override
@@ -20,14 +22,17 @@ class ChatBubble extends StatelessWidget {
     return GestureDetector(
       onLongPress: onLongPress,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 1.5),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          borderRadius:  BorderRadius.only(
+          borderRadius: BorderRadius.only(
             bottomLeft: const Radius.circular(15),
             bottomRight: const Radius.circular(15),
-            topLeft: (isCurrentUser)?const Radius.circular(15) : const Radius.circular(0),
-            topRight: (isCurrentUser)? const Radius.circular(0) : const Radius.circular(15),
+            topLeft: (isCurrentUser)
+                ? const Radius.circular(15)
+                : const Radius.circular(0),
+            topRight: (isCurrentUser)
+                ? const Radius.circular(0)
+                : const Radius.circular(15),
           ),
           // borderRadius: BorderRadius.circular(20),
           gradient: (isCurrentUser)
@@ -44,13 +49,19 @@ class ChatBubble extends StatelessWidget {
                   ],
                 ),
         ),
-        child: Text(
-          message,
-          style: TextStyle(
-            color: isCurrentUser ? Colors.white : Colors.black,
-            fontSize: 16,
-          ),
-        ),
+        child: (image.isEmpty || image == '')
+            ? Text(
+                message,
+                style: TextStyle(
+                  color: isCurrentUser ? Colors.white : Colors.black,
+                  fontSize: 16,
+                ),
+              )
+            : Image.network(
+                image,
+                fit: BoxFit.cover,
+                height: 200,
+              ),
       ),
     );
   }

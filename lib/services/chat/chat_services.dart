@@ -115,4 +115,11 @@ class ChatServices {
         .doc(documentId)
         .delete();
   }
+
+  Future<void> updateToken(String token) async {
+    String sender = AuthService.authService.getCurrentUser()!.email!;
+    await _fireStore.collection("users").doc(sender).update({
+      'token': token,
+    });
+  }
 }

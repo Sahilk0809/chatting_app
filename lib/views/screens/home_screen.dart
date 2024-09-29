@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../services/notification/notification_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -81,124 +82,168 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
             Map? data = snapshot.data!.data();
             UserModal userModal = UserModal.fromMap(data!);
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blueGrey.shade700, Colors.blueGrey.shade500],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            NotificationServices.notificationServices
+                .getFirebaseMessagingToken();
+            return Obx(
+              () => Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      (chatController.isDark.value)
+                          ? Colors.black
+                          : Colors.blueGrey.shade700,
+                      (chatController.isDark.value)
+                          ? Colors.grey[800]!
+                          : Colors.blueGrey.shade500
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
-              ),
-              child: Column(
-                children: [
-                  DrawerHeader(
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(userModal.image),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: Text(
-                      userModal.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
+                child: Column(
+                  children: [
+                    DrawerHeader(
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(userModal.image),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.person,
-                      color: Colors.white.withOpacity(0.6),
-                    ),
-                    title: const Text(
-                      'Profile',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.settings,
-                      color: Colors.white.withOpacity(0.6),
-                    ),
-                    title: const Text(
-                      'Settings',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Are you sure!"),
-                          content: const Text('Do you want to logout'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                AuthService.authService.signOut();
-                                ChatServices.chatServices.toggleOnlineStatus(
-                                  false,
-                                  Timestamp.now(),
-                                  false,
-                                );
-                                Get.offAndToNamed('/');
-                              },
-                              child: const Text('Logout'),
-                            ),
-                          ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        userModal.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
                         ),
-                      );
-                    },
-                    leading: Icon(
-                      Icons.logout,
-                      color: Colors.white.withOpacity(0.6),
-                    ),
-                    title: const Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: Colors.white,
                       ),
                     ),
-                  ),
-                ],
+                    ListTile(
+                      leading: Icon(
+                        Icons.person,
+                        color: Colors.white.withOpacity(0.6),
+                      ),
+                      title: const Text(
+                        'Profile',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.settings,
+                        color: Colors.white.withOpacity(0.6),
+                      ),
+                      title: const Text(
+                        'Settings',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.dark_mode,
+                        color: Colors.white.withOpacity(0.6),
+                      ),
+                      title: const Text(
+                        'Dark Mode',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      trailing: Switch(
+                        value: chatController.isDark.value,
+                        onChanged: (value) {
+                          chatController.toggleLightDarkMode();
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Are you sure!"),
+                            content: const Text('Do you want to logout'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  AuthService.authService.signOut();
+                                  ChatServices.chatServices.toggleOnlineStatus(
+                                    false,
+                                    Timestamp.now(),
+                                    false,
+                                  );
+                                  Get.offAndToNamed('/');
+                                },
+                                child: const Text('Logout'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      leading: Icon(
+                        Icons.logout,
+                        color: Colors.white.withOpacity(0.6),
+                      ),
+                      title: const Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
         ),
       ),
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.blueGrey.shade700,
-        title: const Text(
-          'Chat',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55.0),
+        child: Obx(
+          () => AppBar(
+            foregroundColor: Colors.white,
+            backgroundColor: (chatController.isDark.value)
+                ? Colors.black
+                : Colors.blueGrey.shade700,
+            title: const Text(
+              'Chat',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ),
       ),
       body: Stack(
         children: [
-          AnimatedContainer(
-            duration: const Duration(seconds: 15),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blueGrey.shade700, Colors.blueGrey.shade500],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          Obx(
+            () => Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    (chatController.isDark.value)
+                        ? Colors.black
+                        : Colors.blueGrey.shade700,
+                    (chatController.isDark.value)
+                        ? Colors.grey[800]!
+                        : Colors.blueGrey.shade500
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
           ),
@@ -263,6 +308,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         itemBuilder: (context, index) {
                           return ListTile(
                             onTap: () {
+                              chatController.deviceToken.value =
+                                  userList[index].token;
                               chatController.getReceiver(
                                 userList[index].email,
                                 userList[index].name,
@@ -286,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               ),
                             ),
                             subtitle: Text(
-                              'Last message preview',
+                              'Last seen at ${userList[index].timestamp.toDate().day}/${userList[index].timestamp.toDate().month}  ${userList[index].timestamp.toDate().hour % 12}:${userList[index].timestamp.toDate().minute}',
                               style: TextStyle(color: Colors.grey.shade400),
                             ),
                           );

@@ -20,13 +20,21 @@ class SignUpScreen extends StatelessWidget {
       body: Stack(
         children: [
           // Gradient background
-          AnimatedContainer(
-            duration: const Duration(seconds: 15),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blueGrey.shade800, Colors.blueGrey.shade400],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          Obx(
+            () => Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    (chatController.isDark.value)
+                        ? Colors.black
+                        : Colors.blueGrey.shade700,
+                    (chatController.isDark.value)
+                        ? Colors.grey[800]!
+                        : Colors.blueGrey.shade500
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:chatting_app/services/auth/auth_service.dart';
 import 'package:chatting_app/services/chat/chat_services.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +28,25 @@ class ChatController extends GetxController {
 
   // to check if user is typing or not
   RxBool isTyping = false.obs;
+
+  // token to send notification
+  RxString deviceToken = ''.obs;
+
+  // to store image to send by the user
+  RxString imageStore = ''.obs;
+
+  // to check whether the it is dark mode or light mode
+  RxBool isDark = false.obs;
+
+  // toggle the light dark mode
+
+  void toggleLightDarkMode(){
+    isDark.value = !isDark.value;
+  }
+
+  void uploadImageToStorage(String url) {
+    imageStore.value = url;
+  }
 
   Future<void> createAccountValidation({
     required String email,
@@ -70,6 +90,11 @@ class ChatController extends GetxController {
   void getReceiver(String email, String name) {
     receiverEmail.value = email;
     receiverName.value = name;
+  }
+
+  // to copy the message
+  void copyMessage(String message) {
+    FlutterClipboard.copy(message);
   }
 
   // General Dialog for Edit or Delete

@@ -1,4 +1,4 @@
-import 'package:chatting_app/modal/user_modal.dart';
+import 'package:chatting_app/services/storage/storage_services.dart';
 import 'package:chatting_app/views/screens/components/call_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void scrollToBottom() {
     Future.delayed(
-      const Duration(milliseconds: 200),
+      const Duration(milliseconds: 300),
       () {
         if (scrollController.hasClients) {
           scrollController.animateTo(
@@ -57,13 +57,21 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          AnimatedContainer(
-            duration: const Duration(seconds: 15),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blueGrey.shade800, Colors.blueGrey.shade400],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          Obx(
+            () => Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    (chatController.isDark.value)
+                        ? Colors.black
+                        : Colors.blueGrey.shade700,
+                    (chatController.isDark.value)
+                        ? Colors.grey[800]!
+                        : Colors.blueGrey.shade500
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
           ),
@@ -91,9 +99,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         );
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Text('');
                       }
 
                       var data = snapshot.data!.docs;
@@ -118,11 +124,13 @@ class _ChatScreenState extends State<ChatScreen> {
                               : Alignment.centerLeft;
 
                           return Container(
+                            margin: const EdgeInsets.all(2),
                             alignment: alignment,
                             child: ChatBubble(
                               isCurrentUser: isCurrentUser,
                               message: chatList[index].message!,
                               timestamp: chatList[index].timestamp!,
+                              image: chatList[index].image!,
                               onLongPress: () {
                                 if (isCurrentUser) {
                                   chatController.docId = docIdList[index];
@@ -212,10 +220,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
                 Map? user = snapshot.data!.data();
                 String nightDay = '';
+                String lastSeen = '';
                 if (user!['timestamp'].toDate().hour > 11) {
                   nightDay = 'PM';
                 } else {
                   nightDay = 'AM';
+                }
+
+                if (user['timestamp'].toDate().day ==
+                    Timestamp.now().toDate().day) {
+                  lastSeen =
+                      'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
+                } else if (user['timestamp'].toDate().month ==
+                    Timestamp.now().toDate().month) {
+                  lastSeen =
+                      'Last seen at ${user['timestamp'].toDate().day}/${user['timestamp'].toDate().month} ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay';
                 }
 
                 return Text(
@@ -223,9 +242,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? (user['isTyping'])
                           ? 'Typing...'
                           : 'Online'
-                      : 'Last seen at ${user['timestamp'].toDate().hour % 12}:${user['timestamp'].toDate().minute} $nightDay',
+                      : lastSeen,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                     color: Colors.white,
                   ),
                 );
@@ -235,6 +254,38 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         const Spacer(),
         _buildCallAndVideoButtons(),
+        PopupMenuButton(
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'View Account',
+              child: Text('View Account'),
+            ),
+            const PopupMenuItem(
+              value: 'Media, links, and docs',
+              child: Text('Media, links, and docs'),
+            ),
+            const PopupMenuItem(
+              value: 'Report',
+              child: Text('Report'),
+            ),
+            const PopupMenuItem(
+              value: 'Block',
+              child: Text('Block'),
+            ),
+            const PopupMenuItem(
+              value: 'Wallpaper',
+              child: Text('Wallpaper'),
+            ),
+            const PopupMenuItem(
+              value: 'Clear chat',
+              child: Text('Clear chat'),
+            ),
+          ],
+          icon: const Icon(
+            Icons.more_vert,
+            color: Colors.white,
+          ),
+        ),
       ],
     );
   }
@@ -267,7 +318,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            chatController.copyMessage(chatController.messageController!);
+            chatController.toggleBar.value = false;
+          },
           icon: const Icon(
             Icons.copy,
             color: Colors.white,
@@ -363,7 +417,28 @@ class _ChatScreenState extends State<ChatScreen> {
       children: [
         IconButton(
           onPressed: () async {
+            String url =
+                await StorageServices.storageServices.uploadImageToStorage();
+            chatController.uploadImageToStorage(url);
+          },
+          icon: const Icon(Icons.image),
+        ),
+        IconButton(
+          onPressed: () async {
             String messageText = chatController.txtMessage.text.trim();
+            if (chatController.imageStore.value.isNotEmpty) {
+              ChatModal chat = ChatModal(
+                receiver: chatController.receiverEmail.value,
+                message: '',
+                sender: AuthService.authService.getCurrentUser()!.email,
+                timestamp: Timestamp.now(),
+                image: chatController.imageStore.value,
+              );
+              chatController.txtMessage.clear();
+              chatController.uploadImageToStorage("");
+              await ChatServices.chatServices.addMessageToFireStore(chat);
+              scrollToBottom();
+            }
             if (messageText.isNotEmpty) {
               if (chatController.isEditing.value) {
                 ChatServices.chatServices.updateMessageInFireStore(
@@ -381,9 +456,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   message: messageText,
                   sender: AuthService.authService.getCurrentUser()!.email,
                   timestamp: Timestamp.now(),
+                  image: chatController.imageStore.value,
                 );
                 chatController.txtMessage.clear();
                 await ChatServices.chatServices.addMessageToFireStore(chat);
+                scrollToBottom();
               }
               await ChatServices.chatServices.toggleOnlineStatus(
                 true,
@@ -391,15 +468,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 false,
               );
             }
-            scrollToBottom();
           },
           icon: chatController.isEditing.value
               ? const Icon(Icons.check)
               : Icon(
                   Icons.send,
-                  color: (chatController.messageStore.value.trim().isEmpty)
+                  color: (chatController.messageStore.trim().isEmpty)
                       ? Colors.grey
-                      : Colors.green,
+                      : (chatController.isDark.value) ? Colors.black : Colors.blueGrey,
                 ),
         ),
       ],
