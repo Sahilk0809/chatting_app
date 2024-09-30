@@ -39,4 +39,4 @@ With a clean, modern UI, the app offers real-time features like typing indicator
 
 
 ## Video Link
-https://drive.google.com/drive/folders/1IOrkZ6voMI-CiSilS9M9PS4SE5hrVUf0
+https://drive.google.com/file/d/1kF5yRygYEqETN-UR6kmKEZAVITyQpiCa/view?usp=sharing
