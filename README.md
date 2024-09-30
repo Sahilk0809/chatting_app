@@ -38,5 +38,5 @@ With a clean, modern UI, the app offers real-time features like typing indicator
 <img src = "https://github.com/user-attachments/assets/341ed132-3fd6-4fa7-9cac-077d5f294d21" height=65% width=22%>
 
 
-## Video Link
-https://drive.google.com/file/d/1kF5yRygYEqETN-UR6kmKEZAVITyQpiCa/view?usp=sharing
+## 👇 Video Link 👇
+<a href = "https://drive.google.com/file/d/1kVYNw2H7EPtuMOEsC5W6fCBQO1i6Mq4M/view?usp=sharing"> Chat App Video Link </a>
