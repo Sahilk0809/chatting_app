@@ -35,10 +35,12 @@ class ChatController extends GetxController {
   // to store image which send by the user
   RxString imageStore = ''.obs;
 
+  // storing image picked by user to upload it on storage
   void uploadImageToStorage(String url) {
     imageStore.value = url;
   }
 
+  // validation of signUp
   Future<void> createAccountValidation({
     required String email,
     required String password,
@@ -65,16 +67,32 @@ class ChatController extends GetxController {
             txtName.clear();
             Get.toNamed('/authGate');
           } else {
-            Get.snackbar('Invalid!', 'Passwords not match');
+            Get.snackbar(
+              'Invalid!',
+              'Passwords not match',
+              colorText: Colors.white,
+            );
           }
         } else {
-          Get.snackbar('Invalid!', 'Password must be 6 character long');
+          Get.snackbar(
+            'Invalid!',
+            'Password must be 6 character long',
+            colorText: Colors.white,
+          );
         }
       } else {
-        Get.snackbar('Invalid!', 'Invalid Email Address');
+        Get.snackbar(
+          'Invalid!',
+          'Invalid Email Address',
+          colorText: Colors.white,
+        );
       }
     } else {
-      Get.snackbar('Invalid!', 'Enter name');
+      Get.snackbar(
+        'Invalid!',
+        'Enter name',
+        colorText: Colors.white,
+      );
     }
   }
 

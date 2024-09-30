@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../chat/chat_services.dart';
@@ -24,7 +25,11 @@ class AuthService {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      throw Get.snackbar('Invalid!', e.code);
+      throw Get.snackbar(
+        'Invalid!',
+        e.code,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -36,23 +41,29 @@ class AuthService {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      throw Get.snackbar('Invalid!', 'Invalid password or email!');
+      throw Get.snackbar(
+        'Invalid!',
+        'Invalid password or email!',
+        colorText: Colors.white,
+      );
     }
   }
 
   Future<void> signUpUsingGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+            await googleSignInAccount.authentication;
 
         final AuthCredential authCredential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
 
-        final UserCredential userCredential = await _auth.signInWithCredential(authCredential);
+        final UserCredential userCredential =
+            await _auth.signInWithCredential(authCredential);
 
         if (userCredential.user != null) {
           await ChatServices.chatServices.addUserToFireStore(
@@ -65,12 +76,19 @@ class AuthService {
         }
       }
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('Error!', 'Sign-in failed: ${e.message}');
+      Get.snackbar(
+        'Error!',
+        'Sign-in failed: ${e.message}',
+        colorText: Colors.white,
+      );
     } catch (e) {
-      Get.snackbar('Error!', 'An unexpected error occurred: $e');
+      Get.snackbar(
+        'Error!',
+        'An unexpected error occurred: $e',
+        colorText: Colors.white,
+      );
     }
   }
-
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();
