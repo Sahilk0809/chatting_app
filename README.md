@@ -19,23 +19,25 @@ With a clean, modern UI, the app offers real-time features like typing indicator
 
 ### Light Mode
 
-<img src = "https://github.com/user-attachments/assets/c0d8ca63-06b2-43ce-9f68-98bf6a914f65" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/0358c48e-ffed-4400-a54c-b24d54beb118" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/84594fa9-b133-4552-b749-64319a43f956" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/02730ac4-61bb-4e95-bdb7-39ba07483696" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/fc5f6c64-5092-427b-ad54-ad09020c9396" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/c215cca6-2f6e-4019-8188-299bcc2f79e8" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/341ed132-3fd6-4fa7-9cac-077d5f294d21" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/923f741f-9e12-4295-9598-a5c622487694" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/ecbf9d34-a105-42ed-a090-9b240efdb7e6" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/41c101ac-c806-4bf6-ae22-4501f0bcc68b" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/8eeb613e-1d76-4fed-8275-20b5d32c0abc" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/fbabbc09-524c-40de-bb57-d6db8a960fff" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/d43dac11-978e-4f75-828e-2073388dbdf5" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/dc8ba890-3c26-4dd7-b7bc-00a6fc071357" height=65% width=22%>
 
 ### Dark Mode
 
-<img src = "https://github.com/user-attachments/assets/48503500-75d4-4c28-a15b-344979d0c245" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/b22bcecf-4c02-4cfb-8e20-c05c31f39e01" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/1583c1e7-4174-492a-aee4-f692e9b174f5" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/68e75213-a221-449a-8e62-d7c0817e74ad" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/a0f984cf-e1af-43ba-8570-f0ef5974525d" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/9716f735-3a62-4bfd-a63b-06256e4d943e" height=65% width=22%>
-<img src = "https://github.com/user-attachments/assets/341ed132-3fd6-4fa7-9cac-077d5f294d21" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/372a53e2-7995-485c-9b54-322792c952de" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/7b6687ea-64bd-409f-ba03-db4cfa15b78b" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/c1e77e99-7fcc-4362-a6e7-c2ff5b9c237a" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/4bd6db74-42ef-4e4a-8e79-fc683293c10d" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/22eb7586-8d8f-473b-8b0a-542d844e1806" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/d7f9a725-cc80-4785-b5f2-1c752d6a643e" height=65% width=22%>
+<img src = "https://github.com/user-attachments/assets/dc8ba890-3c26-4dd7-b7bc-00a6fc071357" height=65% width=22%>
+
+
 
 
 ## 👇 Video Link 👇
