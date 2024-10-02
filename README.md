@@ -41,4 +41,4 @@ With a clean, modern UI, the app offers real-time features like typing indicator
 
 
 ## 👇 Video Link 👇
-<a href = "https://drive.google.com/file/d/1kVYNw2H7EPtuMOEsC5W6fCBQO1i6Mq4M/view?usp=sharing"> Chat App Video Link </a>
+<a href = "https://drive.google.com/file/d/1VyRMwvZqno7GPv27eekdv9_JYdCqEGly/view?usp=sharing"> Chat App Video Link </a>
